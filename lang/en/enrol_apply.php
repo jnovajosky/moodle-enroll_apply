@@ -20,6 +20,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     emeneo.com (http://emeneo.com/)
  * @author     Johannes Burk <johannes.burk@sudile.com>
+ * @editor     Josh Novajosky <jnovajosky@chas.org>
  */
 
 // The name of your plug-in. Displayed on admin menus.

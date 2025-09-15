@@ -179,6 +179,12 @@ class enrol_apply_edit_form extends moodleform {
                 $select->setSelected($userid);
             }
         }
+        // Checkbox: allow notifications before course start.
+        $mform->addElement('advcheckbox', 'customint9',
+            get_string('sendbeforestart', 'enrol_apply'),
+            get_string('sendbeforestart_help', 'enrol_apply'));
+        $mform->setDefault('customint9', 0);
+        $mform->setType('customint9', PARAM_INT);
 
         $mform->addElement('text', 'customint3', get_string('maxenrolled', 'enrol_apply'));
         $mform->setType('customint3', PARAM_INT);

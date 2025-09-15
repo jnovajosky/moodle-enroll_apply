@@ -54,6 +54,8 @@ $string['notifycoursebased'] = "New enrolment application notification (instance
 $string['notifycoursebased_desc'] = "Default for new instances: Notify everyone who have the 'Manage apply enrolment' capability for the corresponding course (eg. teachers and managers)";
 $string['notifyglobal'] = "New enrolment application notification (global, eg. global managers and admins)";
 $string['notifyglobal_desc'] = "Define who gets notified about new enrolment applications for any course.";
+$string['sendbeforestart'] = 'Send notifications before course start';
+$string['sendbeforestart_help'] = 'If enabled, enrolment request notifications will be sent immediately, even if the course start date is in the future.';
 
 $string['messageprovider:application'] = 'Course enrolment application notifications';
 $string['messageprovider:confirmation'] = 'Course enrolment application confirmation notifications';

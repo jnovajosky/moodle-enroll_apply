@@ -196,6 +196,31 @@ class enrol_apply_renderer extends plugin_renderer_base {
             $body .= '<p>'. get_string('phone') .': '.$standarduserfields->phone1.'</p>';
             $body .= '<p>'. get_string('phone2') .': '.$standarduserfields->phone2.'</p>';
             $body .= '<p>'. get_string('address') .': '.$standarduserfields->address.'</p>';
+
+            // ---- Custom profile fields (extra fields) ----
+            if (!empty($extrauserfields)) {
+            // Optional heading (add the language string below in Step 4).
+            if (function_exists('get_string')) {
+                $o .= html_writer::tag('h4', get_string('additionalfields', 'enrol_apply'));
+            }
+                $o .= html_writer::start_tag('ul');
+                foreach ((array)$extrauserfields as $k => $v) {
+            // Handle both array and object shapes.
+                    if (is_object($v)) {
+                        $label = isset($v->name) ? (string)$v->name : (string)$k;
+                        $value = isset($v->data) ? (string)$v->data : '';
+                    } else {
+                        $label = (string)$k;       // shortname
+                        $value = (string)$v;       // value
+                    }
+            
+                    if ($value === '') {
+                        continue; // skip empties
+                    }
+                $o .= html_writer::tag('li', s($label) . ': ' . s($value));
+            }
+            $o .= html_writer::end_tag('ul');
+        }
         }
 
         if ($extrauserfields) {

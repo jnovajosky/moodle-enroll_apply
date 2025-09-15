@@ -433,6 +433,11 @@ class enrol_apply_plugin extends enrol_plugin {
 
         $content = $this->update_mail_content($content, $course, $user, $userenrolment);
 
+               $courseid = $instance->courseid;
+        if (!empty($instance->customint9)) {
+            $courseid = 0;
+        }
+
         $message = new enrol_apply_notification(
             $user,
             core_user::get_support_user(),
@@ -440,7 +445,7 @@ class enrol_apply_plugin extends enrol_plugin {
             $subject,
             $content,
             course_get_url($course),
-            $instance->courseid);
+            $courseid);
         message_send($message);
     }
 
@@ -513,6 +518,10 @@ class enrol_apply_plugin extends enrol_plugin {
                 $standarduserfields,
                 $extrauserfields);
             foreach ($cohortuserstonotify as $user) {
+                               $courseid = $instance->courseid;
+                if (!empty($instance->customint9)) {
+                    $courseid = 0;
+                }
                 $message = new enrol_apply_notification(
                     $user,
                     $applicant,
@@ -520,7 +529,7 @@ class enrol_apply_plugin extends enrol_plugin {
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,
-                    $instance->courseid);
+                    $courseid);
                 message_send($message);
             }
  
@@ -545,6 +554,11 @@ class enrol_apply_plugin extends enrol_plugin {
                 $standarduserfields,
                 $extrauserfields);
             foreach ($globaluserstonotify as $user) {
+                                $courseid = $instance->courseid;
+                if (!empty($instance->customint9)) {
+                    $courseid = 0;
+                }
+
                 $message = new enrol_apply_notification(
                     $user,
                     $applicant,
@@ -552,7 +566,7 @@ class enrol_apply_plugin extends enrol_plugin {
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,
-                    $instance->courseid);
+                    $courseid);
                 message_send($message);
             }
         }

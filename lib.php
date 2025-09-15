@@ -143,12 +143,13 @@ class enrol_apply_plugin extends enrol_plugin {
                 $applicationinfo = new stdClass();
                 $applicationinfo->userenrolmentid = $userenrolment->id;
                 // Opt_comment
+                // No user comment supported anymore.
                 // Start modification
-                if (isset($data->applydescription)) {
-                    $applicationinfo->comment = $data->applydescription;
-                } else {
-                    $applicationinfo->comment = '';
-                }
+                //if (isset($data->applydescription)) {
+                //    $applicationinfo->comment = $data->applydescription;
+               // } else {
+               //     $applicationinfo->comment = '';
+               // }
 
                 // End modification
                 $DB->insert_record('enrol_apply_applicationinfo', $applicationinfo, false);

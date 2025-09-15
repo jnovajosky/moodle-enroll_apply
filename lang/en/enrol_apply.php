@@ -23,8 +23,8 @@
  */
 
 // The name of your plug-in. Displayed on admin menus.
-$string['enrolname'] = 'Course enrol confirmation';
-$string['pluginname'] = 'Course enrol confirmation';
+$string['enrolname'] = 'Enrolment by Approval';
+$string['pluginname'] = 'Enrolment by Approval';
 $string['pluginname_desc'] = 'With this plug-in users can apply to be enrolled in a course. A teacher or site manager will then have to approve the enrolment before the user gets enroled.';
 
 $string['confirmmail_heading'] = 'Confirmation email';
@@ -69,7 +69,7 @@ $string['confirmusers'] = 'Enrol Confirm';
 $string['confirmusers_desc'] = 'Users in gray colored rows are on the waiting list.';
 
 $string['coursename'] = 'Course';
-$string['applyuser'] = 'First name / Surname';
+$string['applyuser'] = 'First name / Last Name';
 $string['applyusermail'] = 'Email';
 $string['applydate'] = 'Enrol date';
 $string['btnconfirm'] = 'Confirm requests';
@@ -84,8 +84,8 @@ $string['confirmenrol'] = 'Manage application';
 $string['apply:config'] = 'Configure apply enrol instances';
 $string['apply:manage'] = 'Manage user enrolments';
 $string['apply:manageapplications'] = 'Manage apply enrolment';
-$string['apply:unenrol'] = 'Cancel users from the course';
-$string['apply:unenrolself'] = 'Cancel self from the course';
+$string['apply:unenrol'] = 'Unenrol users from the course';
+$string['apply:unenrolself'] = 'Unenrol self from the course';
 
 $string['notification'] = '<b>Enrolment application successfully sent</b>. <br/><br/>You will be informed by email when your enrolment has been confirmed.';
 

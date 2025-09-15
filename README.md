@@ -1,5 +1,6 @@
 # Description
 A fork of the Emeneo Plugin - Enrolment upon Approval
+
 The enrolment plugin "enrol on approval" add an approval step into the course enrolment process.
 Users will be informed by mail as soon as their course application has been approved/rejected.
 

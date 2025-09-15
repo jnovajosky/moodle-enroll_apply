@@ -28,5 +28,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version  = 2025092500;
 $plugin->requires = 2011080100;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'Enrolment upon approval plugin Version 4.5-a';
+$plugin->release = 'Enrolment upon approval plugin Version 4.5-b';
 $plugin->component = 'enrol_apply';

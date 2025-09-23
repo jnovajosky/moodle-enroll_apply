@@ -321,6 +321,44 @@ class enrol_apply_plugin extends enrol_plugin {
             return true;
         }
     }
+    /**
+     * Add an "Approvals" link under course More menu if enrol_apply is enabled in the course.
+     *
+     * @param navigation_node $navigation Course navigation node (Moodle will place under More in 4.x).
+     * @param stdClass        $course
+     * @param context_course  $context
+     */
+    function enrol_apply_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
+        // Only users with permission should see the link.
+        if (!has_capability('enrol/apply:manageapplications', $context)) {
+            return;
+        }
+    
+        // Only show if this course actually uses enrol_apply.
+        $instances = enrol_get_instances($course->id, true);
+        $hasapply = false;
+        foreach ($instances as $instance) {
+            if ($instance->enrol === 'apply') {
+                $hasapply = true;
+                break;
+            }
+        }
+        if (!$hasapply) {
+            return;
+        }
+    
+        // Build target URL. manage.php handles permission checks as well.
+        $url = new moodle_url('/enrol/apply/manage.php', ['courseid' => $course->id]);
+    
+        // Add node under course settings (appears in the "More" menu in Boost-based themes).
+        $navigation->add(
+            get_string('approvals', 'enrol_apply'),
+            $url,
+            navigation_node::TYPE_SETTING,
+            null,
+            'enrol_apply_manage'
+        );
+    }
 
     public function confirm_enrolment($enrols) {
         global $DB;

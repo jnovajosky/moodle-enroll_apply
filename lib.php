@@ -20,6 +20,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     emeneo.com (http://emeneo.com/)
  * @author     Johannes Burk <johannes.burk@sudile.com>
+ * @editor     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 /** The user is put onto a waiting list and therefore the enrolment not active (used in user_enrolments->status) */
@@ -321,45 +322,7 @@ class enrol_apply_plugin extends enrol_plugin {
             return true;
         }
     }
-    /**
-     * Add an "Approvals" link under course More menu if enrol_apply is enabled in the course.
-     *
-     * @param navigation_node $navigation Course navigation node (Moodle will place under More in 4.x).
-     * @param stdClass        $course
-     * @param context_course  $context
-     */
-    function enrol_apply_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
-        // Only users with permission should see the link.
-        if (!has_capability('enrol/apply:manageapplications', $context)) {
-            return;
-        }
-    
-        // Only show if this course actually uses enrol_apply.
-        $instances = enrol_get_instances($course->id, true);
-        $hasapply = false;
-        foreach ($instances as $instance) {
-            if ($instance->enrol === 'apply') {
-                $hasapply = true;
-                break;
-            }
-        }
-        if (!$hasapply) {
-            return;
-        }
-    
-        // Build target URL. manage.php handles permission checks as well.
-        $url = new moodle_url('/enrol/apply/manage.php', ['courseid' => $course->id]);
-    
-        // Add node under course settings (appears in the "More" menu in Boost-based themes).
-        $navigation->add(
-            get_string('approvals', 'enrol_apply'),
-            $url,
-            navigation_node::TYPE_SETTING,
-            null,
-            'enrol_apply_manage'
-        );
-    }
-
+   
     public function confirm_enrolment($enrols) {
         global $DB;
         foreach ($enrols as $enrol) {
@@ -529,6 +492,12 @@ class enrol_apply_plugin extends enrol_plugin {
                 $standarduserfields,
                 $extrauserfields);
             foreach ($courseuserstonotify as $user) {
+                // Honor the "Send notifications before course start" toggle (customint9).
+                $courseid = $instance->courseid;
+                if (!empty($instance->customint9)) {
+                    $courseid = 0;
+                }
+            
                 $message = new enrol_apply_notification(
                     $user,
                     $applicant,
@@ -536,9 +505,10 @@ class enrol_apply_plugin extends enrol_plugin {
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,
-                    $instance->courseid);
+                    $courseid
+                );
+                message_send($message);
             }
-        }
 
         // Send notification to users with manageapplications in user context
         $cohortuserstonotify = $this->get_users_from_usercapabilits($userid);
@@ -749,4 +719,41 @@ class enrol_apply_plugin extends enrol_plugin {
         $this->process_expirations($trace);
     }
 
+}
+ /**
+     * Add an "Approvals" link under course More menu if enrol_apply is enabled in the course.
+     *
+     * @param navigation_node $navigation Course navigation node (Moodle will place under More in 4.x).
+     * @param stdClass        $course
+     * @param context_course  $context
+     */
+function enrol_apply_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
+     // Only users with permission should see the link.
+     if (!has_capability('enrol/apply:manageapplications', $context)) {
+         return;
+     }
+    // Only show if this course actually uses enrol_apply.
+    $instances = enrol_get_instances($course->id, true);
+    $hasapply = false;
+        foreach ($instances as $instance) {
+            if ($instance->enrol === 'apply') {
+                $hasapply = true;
+                break;
+            }
+        }
+        if (!$hasapply) {
+            return;
+        }
+    
+    // Build target URL. manage.php handles permission checks as well.
+    $url = new moodle_url('/enrol/apply/manage.php', ['courseid' => $course->id]);
+    
+    // Add node under course settings (appears in the "More" menu in Boost-based themes).
+    $navigation->add(
+    get_string('approvals', 'enrol_apply'),
+    $url,
+    navigation_node::TYPE_SETTING,
+    null,
+    'enrol_apply_manage'
+        );
 }

@@ -14,10 +14,10 @@ Users will be informed by mail as soon as their course application has been appr
 ## Install with git
 * use a command line interface of your choice on the destination system (server with moodle installation)
 * switch to the moodle enrol folder: cd /path/to/moodle/enrol/
-* git clone https://github.com/emeneo/apply.git
+* git clone https://github.com/jnovajosky/apply.git
 * navigate on your moodle page to admin --> notifivations and follow the instructions
 
 ## Install from zip
 * download zip file from github: [https://github.com/jnovajosky/moodle-enrol_apply](https://github.com/jnovajosky/moodle-enrol_apply)
 * unpack zip file to /path/to/moodle/enrol/
-* navigate on your moodle page to admin --> notifivations and follow the instructions
+* navigate on your moodle page to admin --> notifications and follow the instructions

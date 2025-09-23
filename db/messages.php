@@ -29,13 +29,13 @@ $messageproviders = array (
         'capability'  => 'enrol/apply:manageapplications'
     ),
 
-    // Notify student that his application was confirmed.
+    // Notify student that their application was confirmed.
     'confirmation' => array (),
 
-    // Notify student that his application was canceled.
+    // Notify student that their application was canceled.
     'cancelation' => array (),
 
-    // Notify student that his application was deferred (put on a waiting list).
+    // Notify student that their application was deferred (put on a waiting list).
     'waitinglist' => array (),
 
     // Start modification

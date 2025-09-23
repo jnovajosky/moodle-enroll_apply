@@ -27,6 +27,7 @@
 $string['enrolname'] = 'Enrolment by Approval';
 $string['pluginname'] = 'Enrolment by Approval';
 $string['pluginname_desc'] = 'With this plug-in users can apply to be enrolled in a course. A teacher or site manager will then have to approve the enrolment before the user gets enroled.';
+$string['approvals'] = 'Approvals';
 
 $string['confirmmail_heading'] = 'Confirmation email';
 $string['confirmmail_desc'] = '';

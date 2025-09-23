@@ -59,6 +59,9 @@ $string['notifyglobal_desc'] = "Define who gets notified about new enrollment ap
 $string['sendbeforestart'] = 'Send notifications before course start';
 $string['sendbeforestart_help'] = 'If enabled, enrollment request notifications will be sent immediately, even if the course start date is in the future.';
 
+$string['notify_pending_popup'] = 'There is an enrollment approval pending for {$a->coursename}. Click here to manage request.';
+$string['manage_enrol_requests'] = 'Manage requests';
+
 $string['messageprovider:application'] = 'Course enrollment application notifications';
 $string['messageprovider:confirmation'] = 'Course enrollment application confirmation notifications';
 $string['messageprovider:cancelation'] = 'Course enrollment application cancelation notifications';

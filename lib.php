@@ -119,6 +119,25 @@ class enrol_apply_plugin extends enrol_plugin {
             }
         }
 
+        if ($DB->record_exists('user_enrolments', ['userid' => $USER->id, 'enrolid' => $instance->id])) {
+            $ue = $DB->get_record('user_enrolments', ['userid' => $USER->id, 'enrolid' => $instance->id], '*', MUST_EXIST);
+            $statuspending  = ($ue->status == ENROL_USER_SUSPENDED);
+            $statuswaitlist = (defined('ENROL_APPLY_USER_WAIT') && $ue->status == ENROL_APPLY_USER_WAIT);
+        
+            if ($statuspending || $statuswaitlist) {
+                $statuslabel = $statuspending ? get_string('pendingapproval', 'enrol_apply')
+                                              : get_string('waitlist', 'enrol_apply');
+        
+                $out  = $OUTPUT->notification(get_string('alreadyapplied', 'enrol_apply', $statuslabel), 'info');
+                $url  = new moodle_url('/enrol/apply/cancel.php', ['id' => $instance->id, 'sesskey' => sesskey()]);
+                $btn  = $OUTPUT->single_button($url, get_string('withdrawrequest', 'enrol_apply'), 'post');
+                return $out . $btn;
+            }
+        
+            // If not pending/waitlist, keep your original message:
+            return $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
+        }
+
         require_once("$CFG->dirroot/enrol/apply/apply_form.php");
 
         $form = new enrol_apply_apply_form(null, $instance);
@@ -143,16 +162,15 @@ class enrol_apply_plugin extends enrol_plugin {
                     'id', MUST_EXIST);
                 $applicationinfo = new stdClass();
                 $applicationinfo->userenrolmentid = $userenrolment->id;
+                
                 // Opt_comment
-                // No user comment supported anymore.
-                // Start modification
+                // Removed student comment on enrollment page, can be turned back on.
                 //if (isset($data->applydescription)) {
                 //    $applicationinfo->comment = $data->applydescription;
-               // } else {
-               //     $applicationinfo->comment = '';
-               // }
+                // } else {
+                //     $applicationinfo->comment = '';
+                // }
 
-                // End modification
                 $DB->insert_record('enrol_apply_applicationinfo', $applicationinfo, false);
 
                 // Adding groups to the user

@@ -107,7 +107,7 @@ $string['apply:unenrolself'] = 'Unenroll self from the course';
 $string['notification'] = '<b>Enrollment application successfully sent</b>. <br/><br/>You will be informed by email when your enrollment has been confirmed.';
 
 $string['mailtoteacher_suject'] = 'New Enrollment request!';
-$string['editdescription'] = 'Textarea description';
+$string['editdescription'] = 'Enrollment Information (Displayed on form)';
 $string['comment'] = 'Comment';
 $string['applycomment'] = 'Comment';
 $string['applymanage'] = 'Manage enrollment applications';

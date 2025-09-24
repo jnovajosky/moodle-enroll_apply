@@ -59,6 +59,9 @@ $string['withdrawrequest'] = 'Withdraw request';
 $string['requestwithdrawn'] = 'Your enrolment request has been withdrawn.';
 $string['alreadyapplied'] = 'Your enrolment request is currently: {$a}.';
 $string['cancelfailed'] = 'Unable to withdraw this request.';
+$string['applicationwithdrawnnotification'] = 'A student withdrew their enrolment request for {$a->coursename}. Click to review.';
+$string['applicationwithdrawnsubject']     = 'Request withdrawn: {$a->coursename}';
+$string['applicationwithdrawnbody']        = 'The enrolment request for "{$a->coursename}" was withdrawn by the applicant. Click the link to review outstanding requests.';
 
 $string['notify_heading'] = 'Notification settings';
 $string['notify_desc'] = 'Define who gets notified about new enrollment applications.';

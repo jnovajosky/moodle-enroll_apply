@@ -54,6 +54,12 @@ $string['cancelmailsubject_desc'] = '';
 $string['cancelmailcontent'] = 'Cancelation email content';
 $string['cancelmailcontent_desc'] = 'Please use the following special marks to replace email content with data from Moodle.<br/>{firstname}:The first name of the user; {content}:The course name;{lastname}:The last name of the user;{username}:The users registration username';
 
+//Student Withdrawal
+$string['withdrawrequest'] = 'Withdraw request';
+$string['requestwithdrawn'] = 'Your enrolment request has been withdrawn.';
+$string['alreadyapplied'] = 'Your enrolment request is currently: {$a}.';
+$string['cancelfailed'] = 'Unable to withdraw this request.';
+
 $string['notify_heading'] = 'Notification settings';
 $string['notify_desc'] = 'Define who gets notified about new enrollment applications.';
 $string['notifycoursebased'] = "New enrollment application notification (instance based, eg. course teachers)";

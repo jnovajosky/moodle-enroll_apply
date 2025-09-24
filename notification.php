@@ -29,44 +29,38 @@ class enrol_apply_notification extends \core\message\message {
         global $CFG;
         require_once($CFG->dirroot . '/course/lib.php');
 
-        $this->component = 'enrol_apply';
-        $this->name      = 'application';
-        $this->notification = 1;
-        
-        $this->userfrom  = $from;
-        $this->userto    = $to;
-        
+        // Required routing fields.
+        $this->component    = 'enrol_apply';   // Must match db/messages.php
+        $this->notification = 1;               // Treat as a notification
+
+        // Sender / recipient.
+        $this->userfrom = $from;
+        $this->userto   = $to;
+
+        // Message bodies.
         $this->subject           = $subject;
         $this->fullmessage       = html_to_text($content, 0, false);
         $this->fullmessageformat = FORMAT_PLAIN;
         $this->fullmessagehtml   = $content;
-        
-        $this->contexturl     = is_object($url) ? $url->out(false) : (string)$url;
-        $this->contexturlname = get_string('manage_enrol_requests', 'enrol_apply');
-        
-        $this->smallmessage = get_string('notify_pending_popup', 'enrol_apply',
-            (object)['coursename' => format_string($course->fullname)]);
-        $this->courseid = (int)$courseid; // or 0 when your "send before start" toggle is on
-        
-        // Use a proper URL string for contexturl (popup click target).
+
+        // Click target for popup (must be a string URL).
         $this->contexturl     = is_object($url) ? $url->out(false) : (string)$url;
         $this->contexturlname = get_string('manage_enrol_requests', 'enrol_apply');
 
-        $this->courseid     = (int)$courseid;
-        $this->notification = 1; // Mark as notification.
+        // Course context (0 is fine if you intentionally unset to avoid deferral).
+        $this->courseid = (int)$courseid;
 
-        // Prepare a course name for smallmessage placeholders.
+        // Prepare course name for popup text (after courseid is set).
         $coursename = '';
         if (!empty($this->courseid)) {
             $course = get_course($this->courseid);
             $coursename = format_string($course->fullname);
         }
 
+        // Provider name + smallmessage per type.
         switch ($type) {
             case 'application':
-                // Provider key used in db/messages.php.
-                $this->name = 'application';
-                // Popup text with course name and clear CTA.
+                $this->name = 'application'; // Provider key defined in db/messages.php
                 $this->smallmessage = get_string('notify_pending_popup', 'enrol_apply',
                     (object)['coursename' => $coursename]);
                 break;

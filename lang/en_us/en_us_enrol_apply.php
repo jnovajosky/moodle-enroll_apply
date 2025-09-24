@@ -54,6 +54,12 @@ $string['cancelmailsubject_desc'] = '';
 $string['cancelmailcontent'] = 'Cancelation email content';
 $string['cancelmailcontent_desc'] = 'Please use the following special marks to replace email content with data from Moodle.<br/>{firstname}:The first name of the user; {content}:The course name;{lastname}:The last name of the user;{username}:The users registration username';
 
+//Student Withdrawal
+$string['withdrawrequest'] = 'Withdraw request';
+$string['requestwithdrawn'] = 'Your enrolment request has been withdrawn.';
+$string['alreadyapplied'] = 'Your enrolment request is currently: {$a}.';
+$string['cancelfailed'] = 'Unable to withdraw this request.';
+
 $string['notify_heading'] = 'Notification settings';
 $string['notify_desc'] = 'Define who gets notified about new enrollment applications.';
 $string['notifycoursebased'] = "New enrollment application notification (instance based, eg. course teachers)";
@@ -101,7 +107,7 @@ $string['apply:unenrolself'] = 'Unenroll self from the course';
 $string['notification'] = '<b>Enrollment application successfully sent</b>. <br/><br/>You will be informed by email when your enrollment has been confirmed.';
 
 $string['mailtoteacher_suject'] = 'New Enrollment request!';
-$string['editdescription'] = 'Textarea description';
+$string['editdescription'] = 'Enrollment Information (Displayed on form)';
 $string['comment'] = 'Comment';
 $string['applycomment'] = 'Comment';
 $string['applymanage'] = 'Manage enrollment applications';
@@ -167,4 +173,3 @@ $string['sendexpirynotificationstask'] = "Apply enrollment send expiry notificat
 $string['messageprovider:expiry_notification'] = 'Apply enrollment expiry notifications';
 
 $string["profileoption"] = "Profile Field to Show in Table";
-

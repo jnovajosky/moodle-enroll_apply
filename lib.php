@@ -265,22 +265,66 @@ class enrol_apply_plugin extends enrol_plugin {
 
     public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue) {
         $actions = array();
-        $context = $manager->get_context();
+        $context  = $manager->get_context();
         $instance = $ue->enrolmentinstance;
+    
         $params = $manager->get_moodlepage()->url->params();
         $params['ue'] = $ue->id;
+
+        // Unenrol (Custom).
         if ($this->allow_unenrol_user($instance, $ue) && has_capability("enrol/apply:unenrol", $context)) {
             $url = new moodle_url('/enrol/unenroluser.php', $params);
             $actions[] = new user_enrolment_action(
                 new pix_icon('t/delete', ''),
                 get_string('unenrol', 'enrol'),
                 $url,
-                array('class' => 'unenrollink', 'rel' => $ue->id));
+                array('class' => 'unenrollink', 'rel' => $ue->id)
+            );
         }
+    
+        // Edit (Custom).
         if ($this->allow_manage($instance) && has_capability("enrol/apply:manage", $context)) {
             $url = new moodle_url('/enrol/editenrolment.php', $params);
-            $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class'=>'editenrollink', 'rel'=>$ue->id));
+            $actions[] = new user_enrolment_action(
+                new pix_icon('t/edit', ''),
+                get_string('edit'),
+                $url,
+                array('class'=>'editenrollink', 'rel'=>$ue->id)
+            );
         }
+    
+        // Status badges + manage icon for enrol_apply.
+        $isapply     = (isset($instance->enrol) && $instance->enrol === 'apply');
+        $ispending   = ($ue->status == ENROL_USER_SUSPENDED); // your pending state
+        $iswaitlist  = (defined('ENROL_APPLY_USER_WAIT') && $ue->status == ENROL_APPLY_USER_WAIT);
+    
+        if ($isapply && ($ispending || $iswaitlist)) {
+            // Badge text depends on status.
+            $label = $ispending
+                ? get_string('pendingapproval', 'enrol_apply')
+                : get_string('waitlist', 'enrol_apply');
+    
+            // Badge (non-clickable).
+            $badge = new user_enrolment_action(
+                new pix_icon('i/warning', '', 'core'),
+                $label,
+                new moodle_url('#'),
+                array('class' => 'apply-status-badge', 'aria-disabled' => 'true', 'onclick' => 'return false;')
+            );
+            array_unshift($actions, $badge);
+    
+            // Manage icon.
+            if (has_capability('enrol/apply:manageapplications', $context)) {
+                $manageurl = new moodle_url('/enrol/apply/manage.php', ['id' => $instance->id]);
+                $actions[] = new user_enrolment_action(
+                    new pix_icon('i/users', '', 'core'),
+                    get_string('confirmenrol', 'enrol_apply'),
+                    $manageurl,
+                    array('class' => 'apply-managelink', 'rel' => $ue->id)
+                );
+            }
+        }
+    
         return $actions;
     }
 

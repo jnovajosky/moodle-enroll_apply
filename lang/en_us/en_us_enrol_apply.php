@@ -27,7 +27,11 @@
 $string['enrolname'] = 'Enrollment by Approval';
 $string['pluginname'] = 'Enrollment by Approval';
 $string['pluginname_desc'] = 'With this plug-in users can apply to be enrolled in a course. A teacher or site manager will then have to approve the enrollment before the user gets enroled.';
+
+// Custom menus and badges.
 $string['approvals'] = 'Approvals';
+$string['pendingapproval'] = 'Pending approval';
+$string['waitlist'] = 'Waitlist';
 
 $string['confirmmail_heading'] = 'Confirmation email';
 $string['confirmmail_desc'] = '';

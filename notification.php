@@ -30,14 +30,24 @@ class enrol_apply_notification extends \core\message\message {
         require_once($CFG->dirroot . '/course/lib.php');
 
         $this->component = 'enrol_apply';
+        $this->name      = 'application';
+        $this->notification = 1;
+        
         $this->userfrom  = $from;
         $this->userto    = $to;
-
+        
         $this->subject           = $subject;
         $this->fullmessage       = html_to_text($content, 0, false);
         $this->fullmessageformat = FORMAT_PLAIN;
         $this->fullmessagehtml   = $content;
-
+        
+        $this->contexturl     = is_object($url) ? $url->out(false) : (string)$url;
+        $this->contexturlname = get_string('manage_enrol_requests', 'enrol_apply');
+        
+        $this->smallmessage = get_string('notify_pending_popup', 'enrol_apply',
+            (object)['coursename' => format_string($course->fullname)]);
+        $this->courseid = (int)$courseid; // or 0 when your "send before start" toggle is on
+        
         // Use a proper URL string for contexturl (popup click target).
         $this->contexturl     = is_object($url) ? $url->out(false) : (string)$url;
         $this->contexturlname = get_string('manage_enrol_requests', 'enrol_apply');

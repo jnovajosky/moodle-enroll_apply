@@ -15,11 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    enrol_apply
- * @copyright  emeneo.com (http://emeneo.com/)
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     emeneo.com (http://emeneo.com/)
- * @author     Johannes Burk <johannes.burk@sudile.com>
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 use mod_forum\local\exporters\group;

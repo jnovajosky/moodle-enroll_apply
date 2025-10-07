@@ -15,11 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Task definition for enrol_apply.
- * @author    Romain DELEAU
- * @copyright IMT Lille Douai <imt-lille-douai.fr>
- * @package   enrol_apply
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    moodle-enroll_apply
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -36,4 +34,3 @@ $tasks = array(
         'disabled' => 0
     )
 );
-

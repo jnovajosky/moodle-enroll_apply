@@ -55,21 +55,23 @@ class enrol_apply_apply_form extends moodleform {
         if ($instance->customint3 > 0) {
             $count = $DB->count_records('user_enrolments', array('enrolid' => $instance->id));
             if ($count < $instance->customint3) {
-                $mform->addElement('html', '<div class="alert alert-info">'.$count.' '.get_string('maxenrolled_tip_1', 'enrol_apply').' '.$instance->customint3.' '.get_string('maxenrolled_tip_2', 'enrol_apply').'</div>');
+                $mform->addElement('html', '<div class="alert alert-info">'.$count.'
+                '.get_string('maxenrolled_tip_1', 'enrol_apply').' '.$instance->customint3.'
+                '.get_string('maxenrolled_tip_2', 'enrol_apply').'</div>');
             }
         }
 
         $mform->addElement('html', '<p>'.$instance->customtext1.'</p>');
         $comment_title = get_string('comment', 'enrol_apply');
-        if($instance->customtext2 != ''){
+        if ($instance->customtext2 != ''){
             $comment_title = $instance->customtext2;
         }
 
-        // Optionnal commentary zone
+        // Optional commentary zone
         // Start modification
-       // if (($instance->customint7) == 1) {
-         //   $mform->addElement('textarea', 'applydescription', $comment_title, 'cols="80"');
-           // $mform->setType('applydescription', PARAM_TEXT);
+        // if (($instance->customint7) == 1) {
+             // $mform->addElement('textarea', 'applydescription', $comment_title, 'cols="80"');
+             // $mform->setType('applydescription', PARAM_TEXT);
         //}
         // End modification
         

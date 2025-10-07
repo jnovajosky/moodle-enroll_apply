@@ -15,13 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    enrol_apply
- * @copyright  emeneo (http://emeneo.com/)
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     emeneo (http://emeneo.com/)
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
-
-
  
 require_once('../../config.php');
 require_once($CFG->dirroot.'/enrol/apply/lib.php');

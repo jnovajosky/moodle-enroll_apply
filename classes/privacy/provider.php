@@ -13,12 +13,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * Privacy provider.
- *
- * @package    enrol_apply
- * @copyright  2021 Mikhail Golenkov <mikhailgolenkov@catalyst-au.net>
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 namespace enrol_apply\privacy;

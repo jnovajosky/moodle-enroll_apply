@@ -15,14 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * User self unenrolment action and user secrity query for the enrol_apply plugin.
- * The presence of this file plus the capability 'apply:unenrolself'
- * results in a self unenrolment link in the course administration
- * navigation ('Unenrol me from ...').
- *
- * @package    enrol_apply
- * @copyright  2010 Petr Skoda  {@link http://skodak.org}
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 require('../../config.php');

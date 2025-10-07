@@ -4,11 +4,10 @@ A fork of the Emeneo Plugin - Enrolment upon Approval
 The enrolment plugin "enrol on approval" add an approval step into the course enrolment process.
 Users will be informed by mail as soon as their course application has been approved/rejected.
 
-* Moodle Forum: https://moodle.org/mod/forum/discuss.php?d=189334
-* Moodle Plugins Directory: https://moodle.org/plugins/view.php?plugin=enrol_apply
+Be aware that there is not currently an official release as work is still in progress.
 
 * New to this 4.5 Beta fork - added a toggle in the course settings that allows for notifications to be sent out even if the course has not started yet.
-* Update to 4.5.1 Beta - added course navigation menu for easy access to pending approvals that can be accessed if user has the right permissions
+* Update to 4.5.1 Beta - added course navigation menu for easy access to pending approvals that can be accessed if user has the right permissions.
 
 # Installation
 ## Install with git

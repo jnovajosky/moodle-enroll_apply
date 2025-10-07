@@ -13,12 +13,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * Defines the backup_enrol_lti_plugin class.
- *
- * @package   enrol_lti
- * @copyright 2016 Mark Nelson <markn@moodle.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    moodle-enroll_apply
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 defined('MOODLE_INTERNAL') || die();
 

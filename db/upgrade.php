@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    enrol_apply
- * @copyright  emeneo.com (http://emeneo.com/)
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Johannes Burk <johannes.burk@sudile.com>
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -29,24 +28,19 @@ function xmldb_enrol_apply_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2016012801) {
-
         // Define table enrol_apply_applicationinfo to be created.
         $table = new xmldb_table('enrol_apply_applicationinfo');
-
         // Adding fields to table enrol_apply_applicationinfo.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('userenrolmentid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('comment', XMLDB_TYPE_TEXT, null, null, null, null, null);
-
         // Adding keys to table enrol_apply_applicationinfo.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
         $table->add_key('userenrolment', XMLDB_KEY_FOREIGN_UNIQUE, array('userenrolmentid'), 'user_enrolments', array('id'));
-
         // Conditionally launch create table for enrol_apply_applicationinfo.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-
         // Apply savepoint reached.
         upgrade_plugin_savepoint(true, 2016012801, 'enrol', 'apply');
     }
@@ -94,7 +88,6 @@ function xmldb_enrol_apply_upgrade($oldversion) {
 
     if ($oldversion < 2017032400) {
         $enrolapply = enrol_get_plugin('apply');
-
         $instances = $DB->get_records('enrol', array('enrol' => 'apply'));
         foreach ($instances as $instance) {
             $instance->customint3 = 0;
@@ -111,25 +104,20 @@ function xmldb_enrol_apply_upgrade($oldversion) {
     }
 
     if ($oldversion < 2021120501) {
-
         // Define table
         $table = new xmldb_table('enrol_apply_groups');
-
         // Adding fields
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
         $table->add_field('enrolid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'id');
         $table->add_field('groupid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'id');
-
         // Adding keys
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
         $table->add_key('enrol', XMLDB_KEY_FOREIGN, ['enrolid'], 'enrol', ['id']);
         $table->add_key('group', XMLDB_KEY_FOREIGN, ['groupid'], 'groups', ['id']);
-
         // Create table if not exist
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-
         // Apply savepoint reached.
         upgrade_plugin_savepoint(true, 2021120501, 'enrol', 'apply');
     }
@@ -144,5 +132,4 @@ function xmldb_enrol_apply_upgrade($oldversion) {
     }
 
     return true;
-
 }

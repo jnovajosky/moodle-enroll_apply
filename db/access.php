@@ -15,17 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    enrol_apply
- * @copyright  emeneo.com (http://emeneo.com/)
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     emeneo.com (http://emeneo.com/)
- * @author     Johannes Burk <johannes.burk@sudile.com>
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-
     /* Add, edit or remove manual enrol instance. */
     'enrol/apply:config' => array(
         'captype' => 'write',
@@ -69,7 +66,7 @@ $capabilities = array(
         )
     ),
 
-    /* Allow a user to unenrol himself */
+    /* Allow a user to unenrol themself */
     'enrol/apply:unenrolself' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,

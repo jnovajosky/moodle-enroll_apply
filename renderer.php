@@ -83,7 +83,7 @@ class enrol_apply_renderer extends plugin_renderer_base {
             $columns = array(
                 'checkboxcolumn',
                 'course',
-                'fullname', // Magic happens here: The column heading will automatically be set.
+                'fullname',
                 'email',
                 'applydate',
                 'field',
@@ -92,7 +92,7 @@ class enrol_apply_renderer extends plugin_renderer_base {
             $headers = array(
                 html_writer::checkbox('toggleall', 'toggleall', false, '', array('id' => 'toggleall')),
                 get_string('course'),
-                'fullname', // Magic happens here: The column heading will automatically be set due to column name 'fullname'.
+                'fullname',
                 get_string('email'),
                 get_string('applydate', 'enrol_apply'),
                 $field->name,
@@ -103,7 +103,7 @@ class enrol_apply_renderer extends plugin_renderer_base {
             $columns = array(
                 'checkboxcolumn',
                 'course',
-                'fullname', // Magic happens here: The column heading will automatically be set.
+                'fullname',
                 'email',
                 'applydate',
                 'applycomment');
@@ -111,7 +111,7 @@ class enrol_apply_renderer extends plugin_renderer_base {
             $headers = array(
                 html_writer::checkbox('toggleall', 'toggleall', false, '', array('id' => 'toggleall')),
                 get_string('course'),
-                'fullname', // Magic happens here: The column heading will automatically be set due to column name 'fullname'.
+                'fullname',
                 get_string('email'),
                 get_string('applydate', 'enrol_apply'),
                 get_string('applycomment', 'enrol_apply'),
@@ -150,7 +150,7 @@ class enrol_apply_renderer extends plugin_renderer_base {
             'fullname',
             'applycomment');
         $headers = array(
-            'User', // Magic happens here: The column heading will automatically be set due to column name 'fullname'.
+            'User',
             $instance->customtext2);
         $table->define_columns($columns);
         $table->define_headers($headers);
@@ -162,73 +162,68 @@ class enrol_apply_renderer extends plugin_renderer_base {
 
     public function application_notification_mail_body(
         $course, $user, $manageurl, $applydescription, $standarduserfields = null, $extrauserfields = null) {
-
-        $body = '<p>'. get_string('coursename', 'enrol_apply') .': '.format_string($course->fullname).'</p>';
-        $body .= '<p>'. get_string('applyuser', 'enrol_apply') .': '.$user->firstname.' '.$user->lastname.'</p>';
-        $body .= '<p>'. get_string('comment', 'enrol_apply') .': '.$applydescription.'</p>';
-        if ($standarduserfields) {
-            $body .= '<p><strong>'. get_string('user_profile', 'enrol_apply').'</strong></p>';
-            $body .= '<p>'. get_string('firstname') .': '.$standarduserfields->firstname.'</p>';
-            $body .= '<p>'. get_string('lastname') .': '.$standarduserfields->lastname.'</p>';
-            $body .= '<p>'. get_string('email') .': '.$standarduserfields->email.'</p>';
-            $body .= '<p>'. get_string('city') .': '.$standarduserfields->city.'</p>';
-            $body .= '<p>'. get_string('country') .': '.$standarduserfields->country.'</p>';
-            if(isset($standarduserfields->lang)){
-                $body .= '<p>'. get_string('preferredlanguage') .': '.$standarduserfields->lang.'</p>';
-            }
-            $body .= '<p>'. get_string('description') .': '.$standarduserfields->description_editor['text'].'</p>';
-
-            $body .= '<p>'. get_string('firstnamephonetic') .': '.$standarduserfields->firstnamephonetic.'</p>';
-            $body .= '<p>'. get_string('lastnamephonetic') .': '.$standarduserfields->lastnamephonetic.'</p>';
-            $body .= '<p>'. get_string('middlename') .': '.$standarduserfields->middlename.'</p>';
-            $body .= '<p>'. get_string('alternatename') .': '.$standarduserfields->alternatename.'</p>';
-            $body .= '<p>'. get_string('url') .': '.$standarduserfields->url.'</p>';
-            $body .= '<p>'. get_string('icqnumber') .': '.$standarduserfields->icq.'</p>';
-            $body .= '<p>'. get_string('skypeid') .': '.$standarduserfields->skype.'</p>';
-            $body .= '<p>'. get_string('aimid') .': '.$standarduserfields->aim.'</p>';
-            $body .= '<p>'. get_string('yahooid') .': '.$standarduserfields->yahoo.'</p>';
-            $body .= '<p>'. get_string('msnid') .': '.$standarduserfields->msn.'</p>';
-            $body .= '<p>'. get_string('idnumber') .': '.$standarduserfields->idnumber.'</p>';
-            $body .= '<p>'. get_string('institution') .': '.$standarduserfields->institution.'</p>';
-            $body .= '<p>'. get_string('department') .': '.$standarduserfields->department.'</p>';
-            $body .= '<p>'. get_string('phone') .': '.$standarduserfields->phone1.'</p>';
-            $body .= '<p>'. get_string('phone2') .': '.$standarduserfields->phone2.'</p>';
-            $body .= '<p>'. get_string('address') .': '.$standarduserfields->address.'</p>';
-
-            // ---- Custom profile fields (extra fields) ----
-            if (!empty($extrauserfields)) {
-            // Optional heading (add the language string below in Step 4).
-            if (function_exists('get_string')) {
-                $o .= html_writer::tag('h4', get_string('additionalfields', 'enrol_apply'));
-            }
-                $o .= html_writer::start_tag('ul');
-                foreach ((array)$extrauserfields as $k => $v) {
-            // Handle both array and object shapes.
-                    if (is_object($v)) {
-                        $label = isset($v->name) ? (string)$v->name : (string)$k;
-                        $value = isset($v->data) ? (string)$v->data : '';
-                    } else {
-                        $label = (string)$k;       // shortname
-                        $value = (string)$v;       // value
+            $body = '<p>'. get_string('coursename', 'enrol_apply') .': '.format_string($course->fullname).'</p>';
+            $body .= '<p>'. get_string('applyuser', 'enrol_apply') .': '.$user->firstname.' '.$user->lastname.'</p>';
+            $body .= '<p>'. get_string('comment', 'enrol_apply') .': '.$applydescription.'</p>';      
+            if ($standarduserfields) {
+                $body .= '<p><strong>'. get_string('user_profile', 'enrol_apply').'</strong></p>';
+                $body .= '<p>'. get_string('firstname') .': '.$standarduserfields->firstname.'</p>';
+                $body .= '<p>'. get_string('lastname') .': '.$standarduserfields->lastname.'</p>';
+                $body .= '<p>'. get_string('email') .': '.$standarduserfields->email.'</p>';
+                $body .= '<p>'. get_string('city') .': '.$standarduserfields->city.'</p>';
+                $body .= '<p>'. get_string('country') .': '.$standarduserfields->country.'</p>';
+                if(isset($standarduserfields->lang)){
+                    $body .= '<p>'. get_string('preferredlanguage') .': '.$standarduserfields->lang.'</p>';
+                }
+                $body .= '<p>'. get_string('description') .': '.$standarduserfields->description_editor['text'].'</p>';
+                $body .= '<p>'. get_string('firstnamephonetic') .': '.$standarduserfields->firstnamephonetic.'</p>';
+                $body .= '<p>'. get_string('lastnamephonetic') .': '.$standarduserfields->lastnamephonetic.'</p>';
+                $body .= '<p>'. get_string('middlename') .': '.$standarduserfields->middlename.'</p>';
+                $body .= '<p>'. get_string('alternatename') .': '.$standarduserfields->alternatename.'</p>';
+                $body .= '<p>'. get_string('url') .': '.$standarduserfields->url.'</p>';
+                $body .= '<p>'. get_string('icqnumber') .': '.$standarduserfields->icq.'</p>';
+                $body .= '<p>'. get_string('skypeid') .': '.$standarduserfields->skype.'</p>';
+                $body .= '<p>'. get_string('aimid') .': '.$standarduserfields->aim.'</p>';
+                $body .= '<p>'. get_string('yahooid') .': '.$standarduserfields->yahoo.'</p>';
+                $body .= '<p>'. get_string('msnid') .': '.$standarduserfields->msn.'</p>';
+                $body .= '<p>'. get_string('idnumber') .': '.$standarduserfields->idnumber.'</p>';
+                $body .= '<p>'. get_string('institution') .': '.$standarduserfields->institution.'</p>';
+                $body .= '<p>'. get_string('department') .': '.$standarduserfields->department.'</p>';
+                $body .= '<p>'. get_string('phone') .': '.$standarduserfields->phone1.'</p>';
+                $body .= '<p>'. get_string('phone2') .': '.$standarduserfields->phone2.'</p>';
+                $body .= '<p>'. get_string('address') .': '.$standarduserfields->address.'</p>';
+                
+                // ---- Custom profile fields (extra fields) ----
+                if (!empty($extrauserfields)) {
+                // Optional heading (add the language string below in Step 4).
+                    if (function_exists('get_string')) {
+                        $o .= html_writer::tag('h4', get_string('additionalfields', 'enrol_apply'));
                     }
-            
-                    if ($value === '') {
-                        continue; // skip empties
+                    $o .= html_writer::start_tag('ul');
+                    foreach ((array)$extrauserfields as $k => $v) {
+                // Handle both array and object shapes.
+                        if (is_object($v)) {
+                            $label = isset($v->name) ? (string)$v->name : (string)$k;
+                            $value = isset($v->data) ? (string)$v->data : '';
+                        }
+                        else {
+                            $label = (string)$k; // shortname
+                            $value = (string)$v; // value
+                        }
+                        if ($value === '') {
+                            continue; // skip empties
+                        }
+                    $o .= html_writer::tag('li', s($label) . ': ' . s($value));
                     }
-                $o .= html_writer::tag('li', s($label) . ': ' . s($value));
+                    $o .= html_writer::end_tag('ul');
+                }
             }
-            $o .= html_writer::end_tag('ul');
-        }
-        }
-
         if ($extrauserfields) {
             foreach ($extrauserfields as $key => $value) {
                 $body .= '<p>'. $key .': '.$value.'</p>';
             }
         }
-
         $body .= '<p>'. html_writer::link($manageurl, get_string('applymanage', 'enrol_apply')).'</p>';
-
         return $body;
     }
 }

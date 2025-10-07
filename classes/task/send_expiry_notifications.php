@@ -15,39 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Send expiry notifications task.
- *
- * @package   enrol_apply
- * @author    Romain DELEAU
- * @copyright IMT Lille Douai <https://imt-lille-douai.fr>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    moodle-enroll_apply
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 namespace enrol_apply\task;
 
 defined('MOODLE_INTERNAL') || die();
-
-/**
- * Send expiry notifications task.
- */
+//Send expiry notifications task.
 class send_expiry_notifications extends \core\task\scheduled_task {
-
-    /**
-     * Name for this task.
-     *
-     * @return string
-     */
     public function get_name() {
         return get_string('sendexpirynotificationstask', 'enrol_apply');
     }
-
-    /**
-     * Run task for sending expiry notifications.
-     */
+    //Run task for sending expiry notifications.
     public function execute() {
         $enrol = enrol_get_plugin('apply');
         $trace = new \text_progress_trace();
         $enrol->send_expiry_notifications($trace);
     }
-
 }

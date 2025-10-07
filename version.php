@@ -15,18 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    enrol_apply
- * @copyright  emeneo.com (http://emeneo.com/)
+ * @package    moodle-enroll_apply
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Flotter Totte <flottertotte@emeneo.com>
- * @author     Johannes Burk <johannes.burk@sudile.com>
+ * @author     Josh Novajosky <jnovajosky@gmail.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
-
 
 $plugin->version  = 2025092506;
 $plugin->requires = 2011080100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = 'Enrolment upon approval plugin Version 4.5.6-b';
-$plugin->component = 'enrol_apply';
+$plugin->component = 'moodle-enroll_apply';

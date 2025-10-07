@@ -26,4 +26,4 @@ $plugin->version  = 2025092506;
 $plugin->requires = 2011080100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '4.5.6-b';
-$plugin->component = 'moodle-enroll_apply';
+$plugin->component = 'enrol_apply';

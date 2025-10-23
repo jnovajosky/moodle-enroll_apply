@@ -553,10 +553,7 @@ class enrol_apply_plugin extends enrol_plugin {
             foreach ($courseuserstonotify as $user) {
                 // Honor the "Send notifications before course start" toggle (customint9).
                 $courseid = $instance->courseid;
-                if (!empty($instance->customint9)) {
-                    $courseid = 0;
-                }
-            
+                           
                 $message = new enrol_apply_notification(
                     $user,
                     $applicant,

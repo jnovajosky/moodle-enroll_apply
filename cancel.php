@@ -90,3 +90,12 @@ if (!empty($managers)) {
 // Redirect.
 redirect(new moodle_url('/course/view.php', ['id' => $course->id]),
     get_string('requestwithdrawn', 'enrol_apply'), null, \core\output\notification::NOTIFY_SUCCESS);
+
+// Before sending the message
+debugging('Sending message for withdrawal to user ID: ' . $user->id, DEBUG_DEVELOPER);
+
+// Send the message
+$id = message_send($message);
+
+// Debugging message ID to confirm it's been sent
+debugging('Message sent with ID: ' . $id, DEBUG_DEVELOPER);

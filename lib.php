@@ -808,25 +808,25 @@ class enrol_apply_plugin extends enrol_plugin {
      * @param context_course  $context
      */
 function enrol_apply_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
-     // Only users with permission should see the link.
-     if (!has_capability('enrol/apply:manageapplications', $context)) {
-         return;
-     }
+    // Only users with permission should see the link.
+    if (!has_capability('enrol/apply:manageapplications', $context)) {
+        return;
+    }
     // Only show if this course actually uses enrol_apply.
     $instances = enrol_get_instances($course->id, true);
     $applyinstanceid = null;
-        foreach ($instances as $inst) {
-            if ($inst->enrol === 'apply') { $applyinstanceid = $inst->id; break; }
-        }
-        if (!$applyinstanceid) { return; }
+    foreach ($instances as $inst) {
+        if ($inst->enrol === 'apply') { $applyinstanceid = $inst->id; break; }
+    }
+    if (!$applyinstanceid) { return; }
     $url = new moodle_url('/enrol/apply/manage.php', ['id' => $applyinstanceid]);
-    
+
     // Add node under course settings (appears in the "More" menu in Boost-based themes).
     $navigation->add(
-    get_string('approvals', 'enrol_apply'),
-    $url,
-    navigation_node::TYPE_SETTING,
-    null,
-    'enrol_apply_manage'
-        );
+        get_string('approvals', 'enrol_apply'),
+        $url,
+        navigation_node::TYPE_SETTING,
+        null,
+        'enrol_apply_manage'
+    );
 }

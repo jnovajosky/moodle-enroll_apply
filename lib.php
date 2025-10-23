@@ -562,7 +562,7 @@ class enrol_apply_plugin extends enrol_plugin {
         }
 
         // Send notification to users with manageapplications in user context
-        $cohortuserstonotify = $this->get_users_from_usercapabilits($userid);
+        $cohortuserstonotify = $this->get_users_from_usercapabilities($userid);
             if (!empty($cohortuserstonotify)) {
                 $userenrol = $DB->get_record("user_enrolments",array("userid"=>$userid,"enrolid"=>$instance->id));
                 $manageurl = new moodle_url("/enrol/apply/manage.php", array('userenrol' => $userenrol->id));
@@ -707,7 +707,7 @@ class enrol_apply_plugin extends enrol_plugin {
     }
     
     //get user with capability to this user
-    function get_users_from_usercapabilits($userid) {
+    function get_users_from_usercapabilities($userid) {
         global $DB;
         $context = $DB->get_record("context",array("instanceid"=>$userid,"contextlevel"=>CONTEXT_USER));
         return get_users_by_capability(context::instance_by_id($context->id), 'enrol/apply:manageapplications');  
@@ -797,16 +797,6 @@ class enrol_apply_plugin extends enrol_plugin {
     }
 
     // End modification
-
-
-    /**
-     * Enrol cron support.
-     * @return void
-     */
-    public function cron() {
-        $trace = new text_progress_trace();
-        $this->process_expirations($trace);
-    }
 
 }
 

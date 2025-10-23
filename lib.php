@@ -584,10 +584,8 @@ class enrol_apply_plugin extends enrol_plugin {
                 $standarduserfields,
                 $extrauserfields);
             foreach ($cohortuserstonotify as $user) {
-                               $courseid = $instance->courseid;
-                if (!empty($instance->customint9)) {
-                    $courseid = 0;
-                }
+                $courseid = $instance->courseid;
+                
                 $message = new enrol_apply_notification(
                     $user,
                     $applicant,
@@ -620,10 +618,7 @@ class enrol_apply_plugin extends enrol_plugin {
                 $standarduserfields,
                 $extrauserfields);
             foreach ($globaluserstonotify as $user) {
-                                $courseid = $instance->courseid;
-                if (!empty($instance->customint9)) {
-                    $courseid = 0;
-                }
+                $courseid = $instance->courseid;
 
                 $message = new enrol_apply_notification(
                     $user,

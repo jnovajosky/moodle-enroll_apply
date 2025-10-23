@@ -798,7 +798,6 @@ class enrol_apply_plugin extends enrol_plugin {
 
     // End modification
 
-}
 
  /**
      * Add an "Approvals" link under course More menu if enrol_apply is enabled in the course.

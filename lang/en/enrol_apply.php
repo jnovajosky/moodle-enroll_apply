@@ -80,10 +80,12 @@ $string['messageprovider:confirmation'] = 'Course enrollment application confirm
 $string['messageprovider:cancelation'] = 'Course enrollment application cancelation notifications';
 $string['messageprovider:waitinglist'] = 'Course enrollment application defer notifications';
 
-$string['newapplicationnotification'] = 'There is a new course enrollment application awaiting review.';
-$string['applicationconfirmednotification'] = 'Your course enrollment application was confirmed.';
-$string['applicationcancelednotification'] = 'Your course enrollment application was canceled.';
-$string['applicationdeferrednotification'] = 'Your course enrollment application was deferred (you are currently on the waiting list).';
+$string['newapplicationnotification'] = 'There is a new course enrollment application in {coursename} awaiting review.';
+$string['applicationreceived'] = 'Your application for {coursename} has been received.';
+$string['applicationchangenotification'] = 'Your application for {coursename} has been updated.';
+$string['applicationapprovednotification'] = 'Your application for {coursename} has been approved.';
+$string['applicationcancelednotification'] = 'Your application for {coursename} has been canceled.';
+$string['applicationdeferrednotification'] = 'Your application for {coursename} has been deferred (you are currently on the waiting list).';
 
 $string['confirmusers'] = 'Confirm Enrollment';
 $string['confirmusers_desc'] = 'Users in gray colored rows are on the waiting list.';

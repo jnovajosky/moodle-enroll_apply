@@ -71,7 +71,7 @@ if (!empty($managers)) {
     $content = get_string('applicationwithdrawnbody',    'enrol_apply', $a);
 
     // Honor your "send before start" toggle.
-    $courseidfornotify = !empty($instance->customint9) ? 0 : $instance->courseid;
+    $courseidfornotify = $instance->courseid; // always use course context for managers
 
     foreach ($managers as $muser) {
         $msg = new enrol_apply_notification(

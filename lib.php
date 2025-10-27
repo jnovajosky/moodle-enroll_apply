@@ -493,7 +493,7 @@ class enrol_apply_plugin extends enrol_plugin {
             $extrauserfields = $applicant->profile;
         }
 
-        // Send notification to Instructors / Managers in COURSE context
+        // Send email to Instructors / Managers in COURSE context
         $courseuserstonotify = $this->get_notifycoursebased_users($instance);
         if (!empty($courseuserstonotify)) {
             $manageurl = new moodle_url("/enrol/apply/manage.php", array('id' => $instance->id));
@@ -528,7 +528,7 @@ class enrol_apply_plugin extends enrol_plugin {
             }
         }
 
-        // Send notification to Instructors / Managers in USER context
+        // Send email to Instructors / Managers in USER context
         $cohortuserstonotify = $this->get_users_from_usercapabilits($userid);
 
         if (!empty($cohortuserstonotify)) {
@@ -561,8 +561,27 @@ class enrol_apply_plugin extends enrol_plugin {
             }
  
         }
-
-        // Send notification to users in SYSTEM context?
+		
+		// Notify Instructor / Manager via System Message
+        $courseuserstonotify = $this->get_notifycoursebased_users($instance);
+        if (!empty($courseuserstonotify)) {
+            $manageurl = new moodle_url("/enrol/apply/manage.php", ['id' => $instance->id]);
+            $content = $renderer->application_notification_mail_body($course, $applicant, $manageurl);
+            foreach ($courseuserstonotify as $user) {
+                $message = new \core\message\message();
+                $message->component = 'enrol_apply';
+                $message->name = 'application';
+                $message->userfrom = core_user::get_support_user();
+                $message->userto = $user;
+                $message->subject = get_string('newapplicationnotification', 'enrol_apply');
+                $message->fullmessage = html_to_text($content);
+                $message->fullmessagehtml = $content;
+                $message->notification = 1;
+                message_send($message);
+            }
+        }
+		
+        // Send email to users in SYSTEM context
         $globaluserstonotify = $this->get_notifyglobal_users();
         
         $globaluserstonotify = array_udiff($globaluserstonotify, $courseuserstonotify, function($usera, $userb) {
@@ -597,6 +616,64 @@ class enrol_apply_plugin extends enrol_plugin {
                 message_send($message);
             }
         }
+        
+        // Notify System Users via System Message
+        $globaluserstonotify = $this->get_notifyglobal_users();
+        $globaluserstonotify = array_udiff($globaluserstonotify, $courseuserstonotify, function($usera, $userb) {
+            return $usera->id == $userb->id ? 0 : -1;
+            });
+            if (!empty($globaluserstonotify)) {
+                $manageurl = new moodle_url('/enrol/apply/manage.php');
+            if (!isset($data->applydescription)) {
+                $data->applydescription = '';
+            }
+            $content = $renderer->application_notification_mail_body(
+                $course,
+                $applicant,
+                $manageurl,
+                $data->applydescription,
+                $standarduserfields,
+                $extrauserfields);
+            foreach ($globaluserstonotify as $user) {
+                $courseid = $instance->courseid;
+                $message = new enrol_apply_notification(
+                    $user,
+                    $applicant,
+                    'application',
+                    get_string('mailtoteacher_suject', 'enrol_apply'),
+                    $content,
+                    $manageurl,
+                    $courseid);
+                message_send($message);
+            }
+        }
+		
+        // Notify Applicant about their application status via System Message
+        $student = core_user::get_user($userid);
+        $status_message = get_string('applicationreceived', 'enrol_apply', $course);
+			// Set message based on the user's application status
+			switch ($applicant->status) {
+				case ENROL_USER_SUSPENDED:
+					$status_message = get_string('applicationapprovednotification', 'enrol_apply', $course);
+					break;
+				case ENROL_APPLY_USER_WAIT:
+					$status_message = get_string('applicationdeferrednotification', 'enrol_apply', $course);
+					break;
+				default:
+					$status_message = get_string('applicationcancelednotification', 'enrol_apply', $course);
+					break;
+			}
+			
+		$message = new \core\message\message();
+		$message->component = 'enrol_apply';
+		$message->name = 'application_status_update';
+		$message->userfrom = core_user::get_support_user();
+		$message->userto = $student;
+		$message->subject = get_string('applicationchangenotification', 'enrol_apply');
+		$message->fullmessage = html_to_text($status_message);
+		$message->fullmessagehtml = $status_message;
+		$message->notification = 1;
+		message_send($message);
     }
 
     /**
@@ -727,35 +804,35 @@ class enrol_apply_plugin extends enrol_plugin {
         $this->process_expirations($trace);
     }
 
-}
-
- /**
+    /**
      * Add an "Approvals" link under course More menu if enrol_apply is enabled in the course.
      *
      * @param navigation_node $navigation Course navigation node (Moodle will place under More in 4.x).
      * @param stdClass        $course
      * @param context_course  $context
      */
-function enrol_apply_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
-     // Only users with permission should see the link.
-     if (!has_capability('enrol/apply:manageapplications', $context)) {
-         return;
-     }
-    // Only show if this course actually uses enrol_apply.
-    $instances = enrol_get_instances($course->id, true);
-    $applyinstanceid = null;
-        foreach ($instances as $inst) {
-            if ($inst->enrol === 'apply') { $applyinstanceid = $inst->id; break; }
-        }
-        if (!$applyinstanceid) { return; }
-    $url = new moodle_url('/enrol/apply/manage.php', ['id' => $applyinstanceid]);
-    
-    // Add node under course settings (appears in the "More" menu in Boost-based themes).
-    $navigation->add(
-    get_string('approvals', 'enrol_apply'),
-    $url,
-    navigation_node::TYPE_SETTING,
-    null,
-    'enrol_apply_manage'
-        );
+	function enrol_apply_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
+		 // Only users with permission should see the link.
+		 if (!has_capability('enrol/apply:manageapplications', $context)) {
+			 return;
+		 }
+		 
+		// Only show if this course actually uses enrol_apply.
+		$instances = enrol_get_instances($course->id, true);
+		$applyinstanceid = null;
+			foreach ($instances as $inst) {
+				if ($inst->enrol === 'apply') { $applyinstanceid = $inst->id; break; }
+			}
+			if (!$applyinstanceid) { return; }
+		$url = new moodle_url('/enrol/apply/manage.php', ['id' => $applyinstanceid]);
+		
+		// Add node under course settings (appears in the "More" menu in Boost-based themes).
+		$navigation->add(
+		get_string('approvals', 'enrol_apply'),
+		$url,
+		navigation_node::TYPE_SETTING,
+		null,
+		'enrol_apply_manage'
+			);
+	}
 }

@@ -40,6 +40,7 @@ class enrol_apply_plugin extends enrol_plugin {
         // Users with unenrol cap may unenrol other users manually.
         return true;
     }
+	
     public function roles_protected() {
         // Users may tweak the roles later.
         return false;
@@ -56,25 +57,21 @@ class enrol_apply_plugin extends enrol_plugin {
         return true;
     }
     /**
-     * Prevent to unenrol an user with a pending application
-     *
+     * Prevent the unenrollment of a user with a pending application
      * @param stdClass $instance course enrol instance
      * @param stdClass $ue record from user_enrolments table, specifies user
      * @return bool
      */
     public function allow_unenrol_user(stdClass $instance, stdClass $ue) {
         global $DB;
-        /*
-        if ($DB->record_exists('enrol_apply_applicationinfo', ['userenrolmentid' => $ue->id])) {
-            return false; // This line cause some issues with the unenrol of some users without resolving the application first.
-        }
-        */
         return parent::allow_unenrol_user($instance, $ue);
     }
+	
     public function allow_manage(stdClass $instance) {
         // Users with manage cap may tweak period and status.
         return true;
     }
+	
     /**
      * Returns link to page which may be used to add new instance of enrolment plugin in course.
      * Multiple instances supported.
@@ -83,7 +80,6 @@ class enrol_apply_plugin extends enrol_plugin {
      */
     public function get_newinstance_link($courseid) {
         $context = context_course::instance($courseid, MUST_EXIST);
-
         if (!has_capability('moodle/course:enrolconfig', $context) or !has_capability('enrol/apply:config', $context)) {
             return null;
         }
@@ -92,107 +88,94 @@ class enrol_apply_plugin extends enrol_plugin {
 
     public function enrol_page_hook(stdClass $instance) {
         global $CFG, $OUTPUT, $SESSION, $USER, $DB;
-
         if (isguestuser()) {
             // Can not enrol guest!
             return null;
         }
-
         $allowapply = $this->allow_apply($instance);
-        if ($allowapply !== true) {
-            return '<div class="alert alert-error">' . $allowapply . '</div>';
-        }
+			if ($allowapply !== true) {
+				return '<div class="alert alert-error">' . $allowapply . '</div>';
+			}
 
-        if ($DB->record_exists('user_enrolments', array('userid' => $USER->id, 'enrolid' => $instance->id))) {
-            return $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
-        }
+			if ($DB->record_exists('user_enrolments', array('userid' => $USER->id, 'enrolid' => $instance->id))) {
+				return $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
+			}
 
-        if ($instance->customint3 > 0) {
-            // Max enrol limit specified.
-            $count = $DB->count_records('user_enrolments', array('enrolid' => $instance->id));
-            if ($count >= $instance->customint3) {
-                // Bad luck, no more self enrolments here.
-                return '<div class="alert alert-error">'.get_string('maxenrolledreached_left', 'enrol_apply')." (".$count.") ".get_string('maxenrolledreached_right', 'enrol_apply').'</div>';
-            }
-        }
-
-        if ($DB->record_exists('user_enrolments', ['userid' => $USER->id, 'enrolid' => $instance->id])) {
-            $ue = $DB->get_record('user_enrolments', ['userid' => $USER->id, 'enrolid' => $instance->id], '*', MUST_EXIST);
-            $statuspending  = ($ue->status == ENROL_USER_SUSPENDED);
-            $statuswaitlist = (defined('ENROL_APPLY_USER_WAIT') && $ue->status == ENROL_APPLY_USER_WAIT);
-        
-            if ($statuspending || $statuswaitlist) {
-                $statuslabel = $statuspending ? get_string('pendingapproval', 'enrol_apply')
-                                              : get_string('waitlist', 'enrol_apply');
-        
-                $out  = $OUTPUT->notification(get_string('alreadyapplied', 'enrol_apply', $statuslabel), 'info');
-                $url  = new moodle_url('/enrol/apply/cancel.php', ['id' => $instance->id, 'sesskey' => sesskey()]);
-                $btn  = $OUTPUT->single_button($url, get_string('withdrawrequest', 'enrol_apply'), 'post');
-                return $out . $btn;
-            }
-        
-            // If not pending/waitlist, keep your original message:
-            return $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
-        }
+			if ($instance->customint3 > 0) {
+				// Max enrol limit specified.
+				$count = $DB->count_records('user_enrolments', array('enrolid' => $instance->id));
+				if ($count >= $instance->customint3) {
+					// Bad luck, no more self enrolments here.
+					return '<div class="alert alert-error">'.get_string('maxenrolledreached_left', 'enrol_apply')." (".$count.") ".get_string('maxenrolledreached_right', 'enrol_apply').'</div>';
+				}
+			}
+			
+			if ($DB->record_exists('user_enrolments', ['userid' => $USER->id, 'enrolid' => $instance->id])) {
+				$ue = $DB->get_record('user_enrolments', ['userid' => $USER->id, 'enrolid' => $instance->id], '*', MUST_EXIST);
+				$statuspending  = ($ue->status == ENROL_USER_SUSPENDED);
+				$statuswaitlist = (defined('ENROL_APPLY_USER_WAIT') && $ue->status == ENROL_APPLY_USER_WAIT);
+			
+				if ($statuspending || $statuswaitlist) {
+					$statuslabel = $statuspending ? get_string('pendingapproval', 'enrol_apply')
+												  : get_string('waitlist', 'enrol_apply');
+			
+					$out  = $OUTPUT->notification(get_string('alreadyapplied', 'enrol_apply', $statuslabel), 'info');
+					$url  = new moodle_url('/enrol/apply/cancel.php', ['id' => $instance->id, 'sesskey' => sesskey()]);
+					$btn  = $OUTPUT->single_button($url, get_string('withdrawrequest', 'enrol_apply'), 'post');
+					return $out . $btn;
+				}
+			
+				// If not pending/waitlist, keep your original message:
+				return $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
+			}
 
         require_once("$CFG->dirroot/enrol/apply/apply_form.php");
 
         $form = new enrol_apply_apply_form(null, $instance);
+			if ($data = $form->get_data()) {
+				// Only process when form submission is for this instance (multi instance support).
+				if ($data->instance == $instance->id) {
+					$timestart = time();
+					$timeend = $timestart + $instance->enrolperiod;
+					$roleid = $instance->roleid;
+					$this->enrol_user($instance, $USER->id, $roleid, $timestart, $timeend, ENROL_USER_SUSPENDED);
+					$userenrolment = $DB->get_record(
+						'user_enrolments',
+						array(
+							'userid' => $USER->id,
+							'enrolid' => $instance->id),
+						'id', MUST_EXIST);
+					$applicationinfo = new stdClass();
+					$applicationinfo->userenrolmentid = $userenrolment->id;
+					
+					// Removed student comment on enrollment page, can be turned back on.
+					//if (isset($data->applydescription)) {
+					//    $applicationinfo->comment = $data->applydescription;
+					// } else {
+					//     $applicationinfo->comment = '';
+					// }
 
-        if ($data = $form->get_data()) {
-            // Only process when form submission is for this instance (multi instance support).
-            if ($data->instance == $instance->id) {
-                $timestart = time();
+					$DB->insert_record('enrol_apply_applicationinfo', $applicationinfo, false);
 
-                // Start modification
-                $timeend = $timestart + $instance->enrolperiod;
-                // End modification
+					// Allow for adding user to groups
+					$groups = $DB->get_records(
+						'enrol_apply_groups',
+						array('enrolid' => $instance->id),
+						null,
+						'*',
+						null,
+						null
+					);
+					foreach ($groups as $value) {
+						groups_add_member($value->groupid, $USER->id);
+					}
 
-                $roleid = $instance->roleid;
-
-                $this->enrol_user($instance, $USER->id, $roleid, $timestart, $timeend, ENROL_USER_SUSPENDED);
-                $userenrolment = $DB->get_record(
-                    'user_enrolments',
-                    array(
-                        'userid' => $USER->id,
-                        'enrolid' => $instance->id),
-                    'id', MUST_EXIST);
-                $applicationinfo = new stdClass();
-                $applicationinfo->userenrolmentid = $userenrolment->id;
-                
-                // Opt_comment
-                // Removed student comment on enrollment page, can be turned back on.
-                //if (isset($data->applydescription)) {
-                //    $applicationinfo->comment = $data->applydescription;
-                // } else {
-                //     $applicationinfo->comment = '';
-                // }
-
-                $DB->insert_record('enrol_apply_applicationinfo', $applicationinfo, false);
-
-                // Adding groups to the user
-                // Start modification
-                $groups = $DB->get_records(
-                    'enrol_apply_groups',
-                    array('enrolid' => $instance->id),
-                    null,
-                    '*',
-                    null,
-                    null
-                );
-                foreach ($groups as $value) {
-                    groups_add_member($value->groupid, $USER->id);
-                }
-                // End modification
-
-
-                $this->send_application_notification($instance, $USER->id, $data);
-
-                $notification = $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
-                $button = $OUTPUT->single_button(new moodle_url('/course/view.php', array('id'=> $instance->courseid)),
-                    get_string('continue'));
-                return $notification . $button;
-            }
+					$this->send_application_notification($instance, $USER->id, $data);
+					$notification = $OUTPUT->notification(get_string('notification', 'enrol_apply'), 'notifysuccess');
+					$button = $OUTPUT->single_button(new moodle_url('/course/view.php', array('id'=> $instance->courseid)),
+						get_string('continue'));
+					return $notification . $button;
+				}
         }
 
         $output = $form->render();
@@ -202,7 +185,6 @@ class enrol_apply_plugin extends enrol_plugin {
 
     public function get_action_icons(stdClass $instance) {
         global $OUTPUT;
-
         if ($instance->enrol !== 'apply') {
             throw new coding_exception('invalid enrol instance!');
         }
@@ -239,7 +221,7 @@ class enrol_apply_plugin extends enrol_plugin {
     }
 
     /**
-     * Is it possible to hide/show enrol instance via standard UI?
+     * Check if possible to hide/show enrollment instance
      * @param  stdClass $instance
      * @return bool
      */
@@ -249,8 +231,7 @@ class enrol_apply_plugin extends enrol_plugin {
     }
 
     /**
-     * Is it possible to delete enrol instance via standard UI?
-     *
+     * Check if possible to delete enrollment instance
      * @param stdClass $instance
      * @return bool
      */
@@ -261,7 +242,6 @@ class enrol_apply_plugin extends enrol_plugin {
 
     /**
      * Sets up navigation entries.
-     *
      * @param stdClass $instancesnode
      * @param stdClass $instance
      * @return void
@@ -483,33 +463,10 @@ class enrol_apply_plugin extends enrol_plugin {
         }
     }
 
-    private function notify_applicant($instance, $userenrolment, $type, $subject, $content) {
-        global $CFG;
-        require_once($CFG->dirroot.'/enrol/apply/notification.php');
-        // Required for course_get_url() function.
-        require_once($CFG->dirroot.'/course/lib.php');
-
-        $course = get_course($instance->courseid);
-        $user = core_user::get_user($userenrolment->userid);
-
-        $content = $this->update_mail_content($content, $course, $user, $userenrolment);
-
-               $courseid = $instance->courseid;
-        if (!empty($instance->customint9)) {
-            $courseid = 0;
-        }
-
-        $message = new enrol_apply_notification(
-            $user,
-            core_user::get_support_user(),
-            $type,
-            $subject,
-            $content,
-            course_get_url($course),
-            $courseid);
-        message_send($message);
-    }
-
+	/**
+	* Sends notifications to Instructors and System Admins
+	* Note COURSE, USER, or SYSTEM contexts
+	*/
     private function send_application_notification($instance, $userid, $data) {
         global $CFG, $PAGE,$DB;
         require_once($CFG->dirroot.'/enrol/apply/notification.php');
@@ -536,7 +493,7 @@ class enrol_apply_plugin extends enrol_plugin {
             $extrauserfields = $applicant->profile;
         }
 
-        // Send notification to users with manageapplications in course context (instance depending)?
+        // Send notification to Instructors / Managers in COURSE context
         $courseuserstonotify = $this->get_notifycoursebased_users($instance);
         if (!empty($courseuserstonotify)) {
             $manageurl = new moodle_url("/enrol/apply/manage.php", array('id' => $instance->id));
@@ -550,8 +507,9 @@ class enrol_apply_plugin extends enrol_plugin {
                 $data->applydescription,
                 $standarduserfields,
                 $extrauserfields);
+				
+			// Honor the "Send notifications before course start" toggle (customint9).
             foreach ($courseuserstonotify as $user) {
-                // Honor the "Send notifications before course start" toggle (customint9).
                 $courseid = $instance->courseid;
                 if (!empty($instance->customint9)) {
                     $courseid = 0;
@@ -570,7 +528,7 @@ class enrol_apply_plugin extends enrol_plugin {
             }
         }
 
-        // Send notification to users with manageapplications in user context
+        // Send notification to Instructors / Managers in USER context
         $cohortuserstonotify = $this->get_users_from_usercapabilits($userid);
 
         if (!empty($cohortuserstonotify)) {
@@ -604,7 +562,7 @@ class enrol_apply_plugin extends enrol_plugin {
  
         }
 
-        // Send notification to users with manageapplications in system context?
+        // Send notification to users in SYSTEM context?
         $globaluserstonotify = $this->get_notifyglobal_users();
         
         $globaluserstonotify = array_udiff($globaluserstonotify, $courseuserstonotify, function($usera, $userb) {
@@ -642,7 +600,7 @@ class enrol_apply_plugin extends enrol_plugin {
     }
 
     /**
-     * Returns enrolled users of a course who should be notified about new course enrolment applications.
+     * Returns enrolled users who should be notified about new applications in Course context
      *
      * Note: mostly copied from get_users_from_config() function in moodlelib.php.
      * @param  array $instance Enrol apply instance record.
@@ -655,17 +613,13 @@ class enrol_apply_plugin extends enrol_plugin {
         }
 
         $context = context_course::instance($instance->courseid);
-
-        // We have to make sure that users still have the necessary capability,
-        // it should be faster to fetch them all first and then test if they are present
-        // instead of validating them one-by-one.
         $users = get_enrolled_users($context, 'enrol/apply:manageapplications');
 
         if ($value === '$@ALL@$') {
             return $users;
         }
 
-        $result = array(); // Result in correct order.
+        $result = array();
         $allowed = explode(',', $value);
         foreach ($allowed as $uid) {
             if (isset($users[$uid])) {
@@ -677,7 +631,6 @@ class enrol_apply_plugin extends enrol_plugin {
         return $result;
     }
 
-    //get user with capability to this user
     function get_users_from_usercapabilits($userid) {
         global $DB;
         $context = $DB->get_record("context",array("instanceid"=>$userid,"contextlevel"=>CONTEXT_USER));
@@ -685,7 +638,7 @@ class enrol_apply_plugin extends enrol_plugin {
     }
 
     /**
-     * Returns users who should be notified about new course enrolment applications.
+     * Returns users who should be notified about new applications in SYSTEM context.
      * @return array Array of user IDs.
      */
     public function get_notifyglobal_users() {
@@ -732,8 +685,6 @@ class enrol_apply_plugin extends enrol_plugin {
         $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $oldinstancestatus);
     }
 
-    // Start modification
-
     /**
      * Returns the user who is responsible for self enrolments in given instance.
      *
@@ -766,9 +717,6 @@ class enrol_apply_plugin extends enrol_plugin {
 
         return $this->lasternoller;
     }
-
-    // End modification
-
 
     /**
      * Enrol cron support.

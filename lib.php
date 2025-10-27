@@ -517,7 +517,6 @@ class enrol_apply_plugin extends enrol_plugin {
             
                 $message = new enrol_apply_notification(
                     $user,
-                    'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,
@@ -550,7 +549,6 @@ class enrol_apply_plugin extends enrol_plugin {
                 }
                 $message = new enrol_apply_notification(
                     $user,
-                    'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,
@@ -604,7 +602,6 @@ class enrol_apply_plugin extends enrol_plugin {
 
                 $message = new enrol_apply_notification(
                     $user,
-                    'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,
@@ -633,7 +630,6 @@ class enrol_apply_plugin extends enrol_plugin {
                 $courseid = $instance->courseid;
                 $message = new enrol_apply_notification(
                     $user,
-                    'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
                     $manageurl,

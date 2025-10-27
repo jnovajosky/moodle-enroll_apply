@@ -502,7 +502,7 @@ class enrol_apply_plugin extends enrol_plugin {
             }
             $content = $renderer->application_notification_mail_body(
                 $course,
-                $applicant,
+                $user,
                 $manageurl,
                 $data->applydescription,
                 $standarduserfields,
@@ -517,7 +517,6 @@ class enrol_apply_plugin extends enrol_plugin {
             
                 $message = new enrol_apply_notification(
                     $user,
-                    $applicant,
                     'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
@@ -539,7 +538,7 @@ class enrol_apply_plugin extends enrol_plugin {
             }
             $content = $renderer->application_notification_mail_body(
                 $course,
-                $applicant,
+                $user,
                 $manageurl,
                 $data->applydescription,
                 $standarduserfields,
@@ -551,7 +550,6 @@ class enrol_apply_plugin extends enrol_plugin {
                 }
                 $message = new enrol_apply_notification(
                     $user,
-                    $applicant,
                     'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
@@ -594,7 +592,6 @@ class enrol_apply_plugin extends enrol_plugin {
             }
             $content = $renderer->application_notification_mail_body(
                 $course,
-                $applicant,
                 $manageurl,
                 $data->applydescription,
                 $standarduserfields,
@@ -607,7 +604,6 @@ class enrol_apply_plugin extends enrol_plugin {
 
                 $message = new enrol_apply_notification(
                     $user,
-                    $applicant,
                     'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
@@ -629,7 +625,6 @@ class enrol_apply_plugin extends enrol_plugin {
             }
             $content = $renderer->application_notification_mail_body(
                 $course,
-                $applicant,
                 $manageurl,
                 $data->applydescription,
                 $standarduserfields,
@@ -638,7 +633,6 @@ class enrol_apply_plugin extends enrol_plugin {
                 $courseid = $instance->courseid;
                 $message = new enrol_apply_notification(
                     $user,
-                    $applicant,
                     'application',
                     get_string('mailtoteacher_suject', 'enrol_apply'),
                     $content,
